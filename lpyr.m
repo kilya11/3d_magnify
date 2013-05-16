@@ -39,21 +39,22 @@ for i = 1:size(pyrSmall, 1)
 end
 return;
 %}
-[pyr_stack, pind] = build_Lpyr_stack(pointsNorm(:, :, :));
+[pyr_stack, pind] = build_Lpyr_stack(pointsNorm2(:, :, :));
 
 if 1
     numPixels = 111*111;
     numPixels2 = numPixels + 56*56;
     for i = 1:size(points, 1)
-        if 0
+        if 1
             pyr = pyr_stack(1:numPixels, 1, i);
             filtered = reshape(pyr, [111 111]);
             filtered = filtered(:, 4:111-3);
+            filtered(filtered < -0.05) = 0;
         else
-            pyr = filtered_stack(numPixels + 1:numPixels2, 1, i);
+            pyr = pyr_stack(numPixels + 1:numPixels2, 1, i);
             filtered = reshape(pyr, [56 56]);
             filtered = filtered(:, 5:56-4);
-            filtered(filtered < 0) = 0;
+            %filtered(filtered < 0) = 0;
         end
         
         
@@ -62,12 +63,12 @@ if 1
         imagesc(filtered);
         title(['Frame ' int2str(i) ]);
         drawnow;
-        pause(0.05);
+        %pause(0.05);
     end
     return;
 end
 
-filtered_stack = ideal_bandpassing(pyr_stack, 3, 1.5, 3, 204);
+filtered_stack = ideal_bandpassing(pyr_stack, 3, 1.5, 3, 204/3);
 %{%}
 numPixels = 111*111;
 for i=1:size(points, 1)

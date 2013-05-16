@@ -1,40 +1,66 @@
 pointsNorm = points;
 
-for i = 1:size(points, 1)
-    y = points(i, 3, :);
-    y = squeeze(y);
-    
-    y1 = y;
-    mask = (y == 0);
-    y1(mask) = [];
+sortBase = zeros(size(pointsNorm, 2), size(pointsNorm, 3));
+xList = points(1, 1, :);
+xList = squeeze(xList);
+yList = points(1, 2, :);
+yList = squeeze(yList);
+sortBase(3, :) = xList * max(yList) + yList;
+sortBase(4, :) = yList * max(xList) + xList;
 
-    x = 1:size(y);
-    x1 = x;
-    x1(mask) = [];
+for i = 1:size(sortBase, 1)
+           [~, indices] = sort(sortBase(index, :));
+        indices = squeeze(indices);
 
-    yNorm = interp1(x1, y1, x);
-    
-    pointsNorm(i, 3, :) = yNorm;
 end
-%return;
+
+for i = 1:1%size(pointsNorm, 1)
+    for index = 4:4
+        z = points(i, index, :);
+        z = squeeze(z);
+
+        z1 = z;
+        mask = (z == 0);
+        z1(mask) = [];
+
+        x = 1:size(z);
+        x1 = x;
+        x1(mask) = [];
+
+        imgNorm = interp1(x1, z1, x);
+
+        pointsNorm(i, index, :) = imgNorm;
+        
+        z = z(indices);
+        plot(z)
+      
+    end
+end
+return;
+
+[ySorted yKeys] = sort(y1);
+plot(ySorted)
+
 pointsNorm2 = pointsNorm;
 
-for i = 1:1%size(points, 1)
-    y = pointsNorm(i, 3, :);
-    y = squeeze(y);
-    
-    %y1 = y;
-    %mask = (y == 0);
-    %y1(mask) = [];
+for i = 1:size(pointsNorm, 1)
+    for index = 3:4
+        y = pointsNorm(i, index, :);
+        y = squeeze(y);
 
-    x = 1:size(y);
-    x = x';
-    
-    p = polyfit(x, y, 1);
-    
-    yTrend = polyval(p, x);
+        %y1 = y;
+        %mask = (y == 0);
+        %y1(mask) = [];
 
-    yNorm = y - yTrend;
-    
-    pointsNorm2(i, 3, :) = yNorm;
+        x = 1:size(y);
+        x = x';
+
+        p = polyfit(x, y, 1);
+
+        yTrend = polyval(p, x);
+
+        yNorm = y - yTrend;
+
+        pointsNorm2(i, index, :) = yNorm;
+    end
 end

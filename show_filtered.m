@@ -22,7 +22,7 @@ for i = 1:dim(1)
     %img(img < 0.0)=0;
     %img(img == 0.0)=30;
     %img(50, 50) = 30;
-    img = img(50-20:50+20, 50-10:50+10);
+    %img = img(50-20:50+20, 50-10:50+10);
     imagesc(img);
     caxis(lim);
     title(['Frame ' int2str(i) ])
