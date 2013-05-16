@@ -39,19 +39,23 @@ for i = 1:size(pyrSmall, 1)
 end
 return;
 %}
-[pyr_stack, pind] = build_Lpyr_stack(pointsNorm2(:, :, :));
+if 0
+    [pyr_stack, pind] = build_Lpyr_stack(pointsNorm(:, :, :));
+end
 
-if 1
+filtered_stack = ideal_bandpassing(pyr_stack, 3, 1.5, 3, 204/3);
+
+if 0
     numPixels = 111*111;
     numPixels2 = numPixels + 56*56;
     for i = 1:size(points, 1)
-        if 1
+        if 0
             pyr = pyr_stack(1:numPixels, 1, i);
             filtered = reshape(pyr, [111 111]);
             filtered = filtered(:, 4:111-3);
-            filtered(filtered < -0.05) = 0;
+            filtered(filtered < 0) = 0;
         else
-            pyr = pyr_stack(numPixels + 1:numPixels2, 1, i);
+            pyr = filtered_stack(numPixels + 1:numPixels2, 1, i);
             filtered = reshape(pyr, [56 56]);
             filtered = filtered(:, 5:56-4);
             %filtered(filtered < 0) = 0;
@@ -65,34 +69,14 @@ if 1
         drawnow;
         %pause(0.05);
     end
+
     return;
 end
-
-filtered_stack = ideal_bandpassing(pyr_stack, 3, 1.5, 3, 204/3);
-%{%}
-numPixels = 111*111;
-for i=1:size(points, 1)
-
-    %pyr = pyr_stack(1:numPixels,1,i);
-    pyr = filtered_stack(1:numPixels, 1, i);
-    filtered = reshape(pyr, [111 111]);
-
-    %filtered = reconLpyr(pyr_stack(:,1,i),pind);
-
-    filtered(filtered < 0) = 0;
-    %filtered = filtered(50-15:50+20, 50-10:50+20);
-    imagesc(filtered);
-    title(['Frame ' int2str(i) ]);
-    drawnow;
-    pause(0.02);
-end
-return;
-
     %% amplify each spatial frequency bands according to Figure 6 of our paper
     ind = size(pyr_stack(:,1,1),1);
     nLevels = size(pind,1);
     
-    alpha = 50;
+    alpha = 20;
     lambda_c = 10;
     imgW = 111;
     imgH = 111;
@@ -140,12 +124,12 @@ return;
 
         img1 = reshape(points(i, 3, :), imgSize);
         filtered(filtered < 0) = 0;
-        %filtered = filtered+img1;
+        filtered = filtered+img1;
         %filtered = filtered(50-15:50+20, 50-10:50+20);
-        imagesc(filtered);
+        %imagesc(filtered);
+        mesh(filtered);
 
         pause(0.02);
         %img2 = reshape(points(i, 4, :), imgSize);
         %filtered = reconLpyr(filtered_stack(:,2,k),pind);
-
     end

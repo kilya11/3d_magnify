@@ -22,7 +22,7 @@ for i = 1:size(sortBase, 1)
 end
 
 for i = 1:size(pointsNorm, 1)
-    for index = 4:4
+    for index = 3:4
         z = points(i, index, :);
         z = squeeze(z);
         z = z(index2sort(index, :));
