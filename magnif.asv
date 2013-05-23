@@ -3,14 +3,13 @@ points2 = points(:, :, :);
 index = 3;
 indexF = 1;
 
-factor = 100;
+factor = 1;
 for i = 1:size(points2, 1)
-    points2(i, 3, :) = points(i, 3, :) + filtered_magnified(i, 1, :);% * factor;
-    points2(i, 4, :) = points(i, 4, :) + filtered_magnified(i, 2, :);% * factor;
+    points2(i, 3, :) = points(i, 3, :) + filtered(i, 1, :) * factor;
+    points2(i, 4, :) = points(i, 4, :) + filtered(i, 2, :) * factor;
 end
 
-saveDir = ['../data/2Hz_magnified_x', int2str(factor), '_l_', int2str(lambda_c)];
-mkdir(saveDir);
+saveDir = ['../data/2Hz_magnified_x', factor];
 
 for i = 1:size(points2, 1)
     filePath = [saveDir, '/pointcloud_all_N24_', int2str(i-1), '.pcf'];

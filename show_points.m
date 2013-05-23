@@ -19,8 +19,10 @@ for i = 1:dim(1)
         img(x, y) = points(i, index, k);
     end
     
-    %img(50, 30) = 1;
-    imagesc(img);
+    %img(50, 50) = 300;
+    %imagesc(img);
+    mesh(img);
+    axis([0 120 0 120 minLim maxLim]);
     caxis(lim);
     title(['Frame ' int2str(i) ])
     drawnow;

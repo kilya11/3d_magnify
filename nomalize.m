@@ -41,31 +41,31 @@ for i = 1:size(pointsNorm, 1)
         pointsNorm(i, index, :) = zNorm(sort2index(index, :));
     end
 end
-return;
+%return;
 
-[ySorted yKeys] = sort(y1);
-plot(ySorted)
+pointsNorm2 = points;
 
-pointsNorm2 = pointsNorm;
-
-for i = 1:size(pointsNorm, 1)
+for i = 1:size(pointsNorm2, 1)
     for index = 3:4
-        y = pointsNorm(i, index, :);
-        y = squeeze(y);
+        z = points(i, index, :);
+        z = squeeze(z);
+        z = z(index2sort(index, :));
+        
+        z1 = z;
+        x = 1:size(z);
+        
+        mask = (isnan(z));
+        z1(mask) = [];
 
-        %y1 = y;
-        %mask = (y == 0);
-        %y1(mask) = [];
+        x1 = x;
+        x1(mask) = [];
+        
+        p = polyfit(x1', z1, 1);
 
-        x = 1:size(y);
-        x = x';
+        zTrend = polyval(p, x');
 
-        p = polyfit(x, y, 1);
+        zNorm = z - zTrend;
 
-        yTrend = polyval(p, x);
-
-        yNorm = y - yTrend;
-
-        pointsNorm2(i, index, :) = yNorm;
+        pointsNorm2(i, index, :) = zNorm;
     end
 end
