@@ -5,11 +5,14 @@ indexF = 1;
 
 factor = 100;
 for i = 1:size(points2, 1)
-    points2(i, 3, :) = points(i, 3, :) + filtered_magnified(i, 1, :);% * factor;
-    points2(i, 4, :) = points(i, 4, :) + filtered_magnified(i, 2, :);% * factor;
+    points2(i, 3, :) = points(i, 3, :) + filtered_magnified(i, 1, :) * factor;
+    points2(i, 4, :) = points(i, 4, :) + filtered_magnified(i, 2, :) * factor;
 end
 
-saveDir = ['../data/2Hz_magnified_x', int2str(factor), '_l_', int2str(lambda_c)];
+factor = 100;
+
+%saveDir = ['../data/2Hz_magnified_x', int2str(factor), '_l_', int2str(lambda_c)];
+saveDir = ['../data/4Hz_magnified_x', int2str(factor), '_fft2_band'];
 mkdir(saveDir);
 
 for i = 1:size(points2, 1)

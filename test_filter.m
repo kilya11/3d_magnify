@@ -1,7 +1,7 @@
 samplingRate = 5000;
 
 % Signal parameters:
-f = [ 40 100  ];      % frequencies   
+f = [ 10 40 100  ];      % frequencies   
 M = 500;                        % signal length 
 
 frames = 10;
@@ -12,10 +12,13 @@ for frame=1:frames
     for fk = f; 
         x(frame, :) = x(frame, :) + sin(2*pi*n*fk/samplingRate); 
     end
-    x(frame, :) = x(frame, :) + 1;
+    x(frame, :) = x(frame, :) + 3;
 end
 
 filtered = ideal_bandpassing(x, 2, 30, 50, samplingRate);
-plot(n, x(1, :));
+plot(n, x(1, :), 'k');
 hold all;
-plot(n, filtered(1, :));
+plot(n, filtered(1, :), '--k');
+xlabel('t')
+ylabel('f(t)')
+legend('Signal', 'Filter')

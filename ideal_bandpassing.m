@@ -29,7 +29,7 @@ function filtered = ideal_bandpassing(input, dim, wl, wh, samplingRate)
     Freq = 1:n;
     Freq = (Freq-1)/n*samplingRate;
     mask = Freq > wl & Freq < wh;
-    
+    Freq
     Dimensions(1) = 1;
     mask = mask(:);
     mask = repmat(mask, Dimensions);

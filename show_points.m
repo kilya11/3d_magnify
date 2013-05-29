@@ -5,6 +5,8 @@ dim = size(points);
 maxLim = max(max(max(points(:,index,:))));
 minLim = min(min(min(points(:,index,:))));
 
+colormap gray;
+
 % Skalierung fürs Colorbar
 lim = [minLim maxLim];
 for i = 1:dim(1)  

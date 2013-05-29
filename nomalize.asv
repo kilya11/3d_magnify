@@ -1,3 +1,32 @@
+if 1
+    t = points(10, 3, :);
+    t = reshape(t, [111 111]);
+    for i = 1:7
+    i
+    row = t(i,:);
+    plot(row)
+    drawnow;
+    pause(0.1)
+    end
+    
+    t2 = pointsNorm(10, 3, :);
+    t2 = reshape(t2, [111 111]);
+    row2 = t2(i,:);
+    
+    figure(1);
+    clf reset;
+    colormap gray;
+    subplot(2, 1, 1);
+    plot(row, 'k')
+    xlabel('x')
+    ylabel(
+    
+    subplot(2, 1, 2);
+    plot(row2, 'k')
+    xlabel('x')
+    return;
+end
+
 pointsNorm = points;
 
 sortBase = zeros(size(pointsNorm, 2), size(pointsNorm, 3));

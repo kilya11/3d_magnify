@@ -9,7 +9,8 @@ points = zeros(framesNum, columnNum, minDim);
 
 clear global last_mask;
 for i = 1:size(points, 1)
-    filePath = ['../data/2Hz/pointcloud_all_N24_', int2str(i-1), '.pcf'];
+    %filePath = ['../data/2Hz/pointcloud_all_N24_', int2str(i-1), '.pcf'];
+    filePath = ['../data/4Hz/pointcloud_all_N21_', int2str(i-1), '.pcf'];
     if mod(i, 10) == 0
         display(['Loading ', filePath]);
     end
@@ -21,10 +22,9 @@ for i = 1:size(points, 1)
     points(i, :, :) = listMask;
 end
 
-    
-img = reshape(pointsNorm(1, 3, :), [111 111]);
+img = reshape(points(1, 3, :), [111 111]);
 imagesc(img);
-mesh(img)
+%mesh(img)
 return;
 [pyr, pind] = buildLpyr(img, 'auto');
 
@@ -38,9 +38,9 @@ imagesc(pyr1);
 filteredBase = pointsNorm(:, 3:4, :);
 
 filteredBase = permute(filteredBase, [3 2 1]);
-filtered = ideal_bandpassing(filteredBase, 3, 1.9, 2.1, 204/3);
+filtered = ideal_bandpassing(filteredBase, 3, 3.5, 4.5, 204/3);
 filtered = permute(filtered, [3 2 1]);
-
+show_filtered(points, filtered, 1);
 %filtered(filtered < 0) = 0;
 
 display('ready');
@@ -48,9 +48,9 @@ return;
 
 show_points(points2, 3);
 
-show_filtered(points, filtered, 1);
+show_filtered(points, filtered_magnified, 1);
 
-img = filtered(10, 1, :);
+img = filtered_magnified(20, 1, :);
 img = reshape(img, [111 111]);
 imagesc(img);
 
