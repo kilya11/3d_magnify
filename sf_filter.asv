@@ -4,33 +4,57 @@
 % domain).
 
 % parameters for SF filtering
-ctrSF = 0.00; % center SF
-s = 1/(35*2); % sigma of Gaussian function
+ctrSF = 1/(40*2); % center SF
+s = ctrSF/0.5; % sigma of Gaussian function
+ctrSF = 0;
 
-show_log_amp = true; % flag to show log SF spectrum instead of SF spectrum
+show_log_amp = false; % flag to show log SF spectrum instead of SF spectrum
 min_amp_to_show = 10 ^ -10; % small positive value to replace 0 for log SF spectrum
 
-filtered_magnified = zeros(size(points));
+filtered_magnified = zeros(size(filtered));
 
 img1 = filtered(1, 1, :);
-img1 = reshape(img1, [111 111]);
-
-%L = GetLuminanceImage(filename);
+img1 = reshape(img1, imgDim);
 
 % calculate the number of points for FFT (power of 2)
 FFT_pts = 2 .^ ceil(log2(size(img1)));
 
-[A fx fy mfx mfy] = Myff2(img1, FFT_pts(1), FFT_pts(2));
+if 1
+for i = 1:%size(filtered, 1)
+    for index = 1:1
+        img = filtered(5, index, :);
+        img = reshape(img, imgDim);
+%img(abs(img) > 0.2) = 0;
+%img = blurDn(img, 1);
+%img = imresize(img, imgDim);
 
-SF = sqrt(mfx .^ 2 + mfy .^ 2);
+        [img_spektrum fx fy mfx mfy] = Myff2(img, FFT_pts(1), FFT_pts(2));
 
-% SF-bandpass and orientation-unselective filter
-filt = exp(-(SF - ctrSF) .^ 2 / (2 * s ^ 2));
+        SF = sqrt(mfx .^ 2 + mfy .^ 2);
 
-A_filtered = filt .* A; % SF filtering
-img_filtered = real(ifft2(ifftshift(A_filtered))); % IFFT
-img_filtered = img_filtered(1: size(img1, 1), 1: size(img1, 2));
+        % SF-bandpass and orientation-unselective filter
+        filt = exp(-(SF - ctrSF) .^ 2 / (2 * s ^ 2));
 
+        img_spektrum_filtered = filt .* img_spektrum; % SF filtering
+        img_filtered = real(ifft2(ifftshift(img_spektrum_filtered))); % IFFT
+        img_filtered = img_filtered(1: size(img, 1), 1: size(img, 2));
+
+        filtered_magnified(i, index, :) = img_filtered(:);
+    end
+end
+end
+
+if 0
+img = filtered(5, 1, :);
+img = reshape(img, imgDim);
+%imagesc(img1)
+caxis([-0.3 0.3]);
+img(abs(img) > 0.2) = 0;
+img = blurDn(img, 1);
+img = imresize(img, imgDim);
+end
+[img_spektrum fx fy mfx mfy] = Myff2(img, FFT_pts(1), FFT_pts(2));
+%return;
 
 figure(1);
 clf reset;
@@ -39,7 +63,7 @@ colormap gray;
 
 % luminance image
 subplot(2, 2, 1);
-imagesc(img1);
+imagesc(img);
 colorbar;
 axis square;
 set(gca, 'TickDir', 'out');
@@ -47,15 +71,15 @@ title('original image');
 xlabel('x');
 ylabel('y');
 
-A = abs(A);
+img_spektrum = abs(img_spektrum);
 if show_log_amp
-    A(find(A < min_amp_to_show)) = min_amp_to_show; % avoid taking log 0 
-    A = log10(A);
+    img_spektrum(find(img_spektrum < min_amp_to_show)) = min_amp_to_show; % avoid taking log 0 
+    img_spektrum = log10(img_spektrum);
 end
 
 % spectral amplitude
 subplot(2, 2, 2);
-imagesc(fx, fy, A);
+imagesc(fx, fy, img_spektrum);
 axis xy;
 axis square;
 set(gca, 'TickDir', 'out');

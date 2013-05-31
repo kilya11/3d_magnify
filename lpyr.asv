@@ -39,11 +39,12 @@ for i = 1:size(pyrSmall, 1)
 end
 return;
 %}
-if 0
+tic
+if 1
     [pyr_stack, pind] = build_Lpyr_stack(pointsNorm(:, :, :));
 end
 
-filtered_stack = ideal_bandpassing(pyr_stack, 3, 1.5, 3, 204/3);
+filtered_stack = ideal_bandpassing(pyr_stack, 3, 1.5, 2.5, 204/3);
 
     if 0
         numPixels = 111*111;
@@ -107,7 +108,7 @@ filtered_stack = ideal_bandpassing(pyr_stack, 3, 1.5, 3, 204/3);
           display('alpha');
       else
           filtered_stack(indices,:,:) = currAlpha*filtered_stack(indices,:,:);
-          %display('currAlpha');
+          display('currAlpha');
       end
       
       ind = ind - prod(pind(l,:));
@@ -116,7 +117,7 @@ filtered_stack = ideal_bandpassing(pyr_stack, 3, 1.5, 3, 204/3);
       lambda = lambda/2; 
     end
     
-return;
+%return;
     imgSize = [111 111];
     imgCenter = [50-15:50+20, 50-10:50+20];
     filtered_magnified = zeros(size(points));

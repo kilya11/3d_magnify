@@ -1,16 +1,16 @@
-if 1
+if 0
     t = points(10, 3, :);
-    t = reshape(t, [111 111]);
+    t = reshape(t, imgDim);
     for i = 1:7
-    i
-    row = t(i,:);
-    plot(row)
-    drawnow;
-    pause(0.1)
+        i
+        row = t(i,:);
+        plot(row)
+        drawnow;
+        pause(0.1)
     end
     
     t2 = pointsNorm(10, 3, :);
-    t2 = reshape(t2, [111 111]);
+    t2 = reshape(t2, imgDim);
     row2 = t2(i,:);
     
     figure(1);
@@ -51,6 +51,7 @@ for i = 1:size(sortBase, 1)
     sort2index(i, :) = squeeze(indices);
 end
 
+if 1
 for i = 1:size(pointsNorm, 1)
     for index = 3:4
         z = points(i, index, :);
@@ -62,16 +63,25 @@ for i = 1:size(pointsNorm, 1)
 
         z1 = z;
         z1(mask) = [];
-
+        
         x1 = x;
         x1(mask) = [];
 
-        zNorm = interp1(x1, z1, x);
+        p = polyfit(x1', z1, 1);
+        zTrend = polyval(p, x1');
+        zNorm = z1 - zTrend;
+        diff = 2*std(zNorm);
+        mask = abs(zNorm) > diff;
+        x1(mask) = [];
+        z1(mask) = [];
+
+        zNorm = interp1(x1, z1, x, 'nearest', 'extrap');
 
         pointsNorm(i, index, :) = zNorm(sort2index(index, :));
     end
 end
 %return;
+end
 
 pointsNorm2 = points;
 
@@ -99,3 +109,4 @@ for i = 1:size(pointsNorm2, 1)
         pointsNorm2(i, index, :) = zNorm;
     end
 end
+

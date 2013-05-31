@@ -10,8 +10,10 @@
 % 
 function [Lpyr_stack, pind] = build_Lpyr_stack(points)
 
+    global imgDim;
     imgSize = [111 111];
     %imgSize = [36 31];
+    imgSize = imgDim;
     
     img1 = reshape(points(1, 3, :), imgSize);
     img2 = reshape(points(1, 4, :), imgSize);
